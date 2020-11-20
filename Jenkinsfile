@@ -2,7 +2,7 @@
 
 node('centos8') {
   def tag = "latest"
-  def gitUrl = 'git@github.com:rbelnap/tag_demo.git'
+  def gitUrl = 'https://github.com/rbelnap/tag_demo.git'
 
   stage('checkout') {
     checkout([
