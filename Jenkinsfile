@@ -31,7 +31,14 @@ node('centos8') {
 
       def versions = readYaml file: 'versions.yml'
 
-      sh "echo ${versions}"
+      versions.each { image, version ->
+        sh "echo podman pull --creds \"$HUB_LOGIN\" veupathdb/${image}:${version}"
+        sh "echo podman tag ${image}:${version} ${image}:${env.BRANCH_NAME}"
+        sh "echo podman push --creds \"$HU_LOGIN\"  ${image} docker://docker.io/veupathdb/${imageName}"
+
+
+        
+      // sh "echo ${versions}"
       // push to dockerhub (for now)
       // sh "podman push --creds \"$HUB_LOGIN\" ${imageName} docker://docker.io/veupathdb/${imageName}:${tag}"
     }
