@@ -25,10 +25,9 @@ node('centos8') {
       )
     ]) {
 
-      // run tagging script
 
-      // tag versions.yml ${env.BRANCH_NAME}
-
+      // below requires Pipeline Utility Steps plugin in Jenkins
+      // https://plugins.jenkins.io/pipeline-utility-steps/
       def versions = readYaml file: 'versions.yml'
 
       versions.each { image, version ->
@@ -38,9 +37,6 @@ node('centos8') {
       }
 
         
-      // sh "echo ${versions}"
-      // push to dockerhub (for now)
-      // sh "podman push --creds \"$HUB_LOGIN\" ${imageName} docker://docker.io/veupathdb/${imageName}:${tag}"
     }
   }
 }
