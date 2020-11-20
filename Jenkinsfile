@@ -35,7 +35,7 @@ node('centos8') {
         sh "echo podman pull --creds \"$HUB_LOGIN\" veupathdb/${image}:${version}"
         sh "echo podman tag ${image}:${version} ${image}:${env.BRANCH_NAME}"
         sh "echo podman push --creds \"$HU_LOGIN\"  ${image} docker://docker.io/veupathdb/${imageName}"
-
+      }
 
         
       // sh "echo ${versions}"
