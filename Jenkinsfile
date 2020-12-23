@@ -1,9 +1,6 @@
 #!groovy
 
 node('centos8') {
-  parameters {
-    booleanParam(name: 'PUSH', defaultValue: true, description: 'push tagged images to dockerhub')
-  }
 
   def gitUrl = 'https://github.com/rbelnap/tag_demo.git'
 
@@ -27,6 +24,9 @@ node('centos8') {
         variable: 'HUB_LOGIN'
       )
     ]) {
+    parameters {
+      booleanParam(name: 'PUSH', defaultValue: true, description: 'push tagged images to dockerhub')
+    }
 
 echo "push: ${params.PUSH}"
 
