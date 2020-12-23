@@ -1,4 +1,8 @@
 #!groovy
+    parameters {
+      booleanParam(name: 'PUSH', defaultValue: true, description: 'push tagged images to dockerhub')
+    }
+
 
 node('centos8') {
 
@@ -24,10 +28,6 @@ node('centos8') {
         variable: 'HUB_LOGIN'
       )
     ]) {
-    parameters {
-      booleanParam(name: 'PUSH', defaultValue: true, description: 'push tagged images to dockerhub')
-    }
-
 echo "push: ${params.PUSH}"
 
       // below requires Pipeline Utility Steps plugin in Jenkins
