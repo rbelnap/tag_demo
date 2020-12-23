@@ -1,7 +1,13 @@
 #!groovy
 
+properties([
+  parameters([
+     booleanParam(name: 'PUSH', defaultValue: true, description: 'push tagged images to dockerhub')
+  ])
+])
+
 node('centos8') {
-  def tag = "latest"
+
   def gitUrl = 'https://github.com/rbelnap/tag_demo.git'
 
   stage('checkout') {
@@ -24,7 +30,7 @@ node('centos8') {
         variable: 'HUB_LOGIN'
       )
     ]) {
-
+echo "push: ${params.PUSH}"
 
       // below requires Pipeline Utility Steps plugin in Jenkins
       // https://plugins.jenkins.io/pipeline-utility-steps/
@@ -33,7 +39,11 @@ node('centos8') {
       versions.each { image, version ->
         //sh "echo podman pull --creds \"$HUB_LOGIN\" veupathdb/${image}:${version}"
         sh "podman tag ${image}:${version} ${image}:${env.BRANCH_NAME}"
-        //sh "echo podman push --creds \"$HUB_LOGIN\"  ${image} docker://docker.io/veupathdb/${image}"
+        
+        if ( params.PUSH ) {
+          sh "echo I will push"
+          //sh "echo podman push --creds \"$HUB_LOGIN\"  ${image} docker://docker.io/veupathdb/${image}"
+        }
       }
 
         
