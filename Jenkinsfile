@@ -1,8 +1,10 @@
 #!groovy
-    parameters {
-      booleanParam(name: 'PUSH', defaultValue: true, description: 'push tagged images to dockerhub')
-    }
 
+properties([
+  parameters([
+     booleanParam(name: 'PUSH', defaultValue: true, description: 'push tagged images to dockerhub')
+  ])
+])
 
 node('centos8') {
 
