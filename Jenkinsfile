@@ -28,6 +28,7 @@ node('centos8') {
       )
     ]) {
 
+echo "push: ${params.PUSH}"
 
       // below requires Pipeline Utility Steps plugin in Jenkins
       // https://plugins.jenkins.io/pipeline-utility-steps/
@@ -36,6 +37,7 @@ node('centos8') {
       versions.each { image, version ->
         //sh "echo podman pull --creds \"$HUB_LOGIN\" veupathdb/${image}:${version}"
         sh "podman tag ${image}:${version} ${image}:${env.BRANCH_NAME}"
+        
         if ( params.PUSH ) {
           sh "echo I will push"
           //sh "echo podman push --creds \"$HUB_LOGIN\"  ${image} docker://docker.io/veupathdb/${image}"
