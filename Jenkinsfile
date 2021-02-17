@@ -37,12 +37,17 @@ echo "push: ${params.PUSH}"
       def versions = readYaml file: 'versions.yml'
 
       versions.each { image, version ->
-        //sh "echo podman pull --creds \"$HUB_LOGIN\" veupathdb/${image}:${version}"
+        // only pull image if it doesn't exist locally.  This also means that
+        // we *won't* pull if it *does* exist locally.  
+
+        sh "if ! [[ $(podman images veupathdb/${image}:${version} --format \"{{.ID}}\") ]]; then podman pull --creds \"$HUB_LOGIN\" veupathdb/${image}:${version}; fi"
+        // should be something here to prevent total job failure for a single problem image/version?
+
         sh "podman tag ${image}:${version} ${image}:${env.BRANCH_NAME}"
         
         if ( params.PUSH ) {
           sh "echo I will push"
-          //sh "echo podman push --creds \"$HUB_LOGIN\"  ${image} docker://docker.io/veupathdb/${image}"
+          sh "echo podman push --creds \"$HUB_LOGIN\"  ${image} docker://docker.io/veupathdb/${image}:${env.BRANCH_NAME}"
         }
       }
 
