@@ -1,5 +1,8 @@
 #!groovy
 
+// this option exists to enable jobs to request images be tagged, but to do the
+// pushing itself.  It may or may not be used.
+
 properties([
   parameters([
      booleanParam(name: 'PUSH', defaultValue: true, description: 'push tagged images to dockerhub')
@@ -8,20 +11,21 @@ properties([
 
 node('centos8') {
 
-  def gitUrl = 'https://github.com/rbelnap/tag_demo.git'
-
-  stage('checkout') {
-    checkout([
-      $class: 'GitSCM',
-      branches: [[name: env.BRANCH_NAME ]],
-      doGenerateSubmoduleConfigurations: false,
-      extensions: [[
-                     $class: 'SubmoduleOption',
-                     disableSubModules: true
-                   ]],
-      userRemoteConfigs:[[url: gitUrl]]
-    ])
-  }
+  checkout scm
+//  def gitUrl = 'https://github.com/rbelnap/tag_demo.git'
+//
+//  stage('checkout') {
+//    checkout([
+//      $class: 'GitSCM',
+//      branches: [[name: env.BRANCH_NAME ]],
+//      doGenerateSubmoduleConfigurations: false,
+//      extensions: [[
+//                     $class: 'SubmoduleOption',
+//                     disableSubModules: true
+//                   ]],
+//      userRemoteConfigs:[[url: gitUrl]]
+//    ])
+//  }
 
   stage('tag') {
     withCredentials([
@@ -30,7 +34,7 @@ node('centos8') {
         variable: 'HUB_LOGIN'
       )
     ]) {
-echo "push: ${params.PUSH}"
+      echo "push: ${params.PUSH}"
 
       // below requires Pipeline Utility Steps plugin in Jenkins
       // https://plugins.jenkins.io/pipeline-utility-steps/
