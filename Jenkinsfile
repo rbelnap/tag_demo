@@ -40,7 +40,7 @@ echo "push: ${params.PUSH}"
         // only pull image if it doesn't exist locally.  This also means that
         // we *won't* pull if it *does* exist locally.  
 
-        sh "if ! [[ $(podman images veupathdb/${image}:${version} --format \"{{.ID}}\") ]]; then podman pull --creds \"$HUB_LOGIN\" veupathdb/${image}:${version}; fi"
+        sh "if ! [[ \$(podman images veupathdb/${image}:${version} --format \"{{.ID}}\") ]]; then podman pull --creds \"$HUB_LOGIN\" veupathdb/${image}:${version}; fi"
         // should be something here to prevent total job failure for a single problem image/version?
 
         sh "podman tag ${image}:${version} ${image}:${env.BRANCH_NAME}"
